@@ -28,3 +28,6 @@ class WilldoUpdate(UpdateView):
     model = WilldoModel
     fields = ('title', 'note', 'task_type', 'priority', 'date')
     success_url = reverse_lazy('list')
+
+def signupfunc(request):
+    return render(request, 'signup.html', {})
