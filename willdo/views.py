@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
-from .models import WilldoModel
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.db import IntegrityError
+from .models import WilldoModel
 
 # Create your views here.
 class WilldoList(ListView):
@@ -29,5 +32,29 @@ class WilldoUpdate(UpdateView):
     fields = ('title', 'note', 'task_type', 'priority', 'date')
     success_url = reverse_lazy('list')
 
+def descriptionfunc(request):
+    template_name = 'description.html'
+    return render(request, 'description.html', {})
+
 def signupfunc(request):
-    return render(request, 'signup.html', {})
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            user = User.objects.create_user(username, '', password)
+            return render(request, 'signup.html', {'success':'ユーザを登録しました。'})
+        except IntegrityError:
+            return render(request, 'signup.html', {'error':'このユーザは既に登録されています。'})
+    return render(request, 'signup.html', {'context':'ユーザを登録します'})
+
+def loginfunc(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return render(request, 'login.html', {'success':'ログイン成功'})
+        else:
+            return render(request, 'login.html', {'error':'ログイン失敗'})
+    return render(request, 'login.html', {'context':'ログインして下さい'})

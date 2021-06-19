@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>使用方法</title>
-  </head>
-  <body>
+{% extends 'base.html' %}
 
-  </body>
-</html>
+{% block content %}
+<div class="alert alert-primary">
+  <h1 class="display-3">詳細画面</h1>
+  <p class="lead"></p>
+  <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+</div>
+<button type="button" onclick="history.back()">戻る</button>
+{% endblock content %}
