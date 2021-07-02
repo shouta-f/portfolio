@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class='container'>
-  <form action='' method='POST'>{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="更新">
-    <button type="button" onclick="history.back()">戻る</button>
-  </form>
+<div class="alert alert-primary">
+  <h1 class="display-5">タスクを編集します</h1>
 </div>
+<body class="text-center">
+  <div class='container'>
+    <form action='' method='POST'>{% csrf_token %}
+      {{ form.as_p }}
+      <hr class="my-4">
+      <input type="submit" value="更新">
+      <input type="button" value="戻る" onclick="history.back()" >
+    </form>
+  </div>
+</body>
 {% endblock content %}

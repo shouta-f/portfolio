@@ -2,20 +2,34 @@
 
 {% block header %}
 <div class="alert alert-primary">
-  <h1 class="display-3">詳細画面</h1>
-  <p class="lead"></p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+  <h1 class="display-5" style="text-align:center">詳細画面</h1>
 </div>
+<!-- <body class="text-center"></body> -->
 {% endblock %}
 
 {% block content %}
 <div class='container'>
+{% if request.user.is_superuser == True　%}
   <div class="alert alert-success" role="alert">
-    <p>詳細：{{ object.note }}</p>
-    <p>登録日：{{ object.date }}</p>
+    <p>作成者：{{ request.user.id }}</p>
+    <p>種類：{{ object.get_task_type_display }}</p>
+    <p>優先度：{{ object.get_priority_display }}</p>
+    <p>内容：{{ object.note }}</p>
+    <p>期日：{{ object.date }}</p>
   </div>
-  <button type="button" onclick="history.back()">戻る</button>
+{% elif request.user == object.create_user %}
+  <div class="alert alert-warning" role="alert">
+    <p>作成者：{{ request.user.id }}</p>
+    <p>種類：{{ object.get_task_type_display }}</p>
+    <p>優先度：{{ object.get_priority_display }}</p>
+    <p>内容：{{ object.note }}</p>
+    <p>期日：{{ object.date }}</p>
+  </div>
+{% else %}
+  <div class="alert alert-danger" role="alert">
+    <p>権限がありません</p>
+  </div>
+{% endif %}
+  <input type="button" value="戻る" onclick="history.back()" >
 </div>
 {% endblock content %}

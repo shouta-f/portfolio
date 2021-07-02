@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<body class="text-center">
-    {{ context }}
-    {{ success }}
-    {{ error }}
+<div class='text-center'>
     <form class="form-signin" method="POST">{% csrf_token %}
-    <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-    
+    {% if context %}
+    <div class="alert alert-primary">
+        <h1 class="h3 mb-3 fw-normal" style="text-align:center">{{ context }}</h1>
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+        <h1 class="h3 mb-3 fw-normal" style="text-align:center">{{ error }}</h1>
+        <h1 class="h4 mb-4 fw-normal" style="text-align:center">{{ message }}</h1>
+    </div>
+    {% endif %}
+    </div>
     <div class="form-floating">
-        <label for="floatingInput">Username</label>
         <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username">
     </div>
     <div class="form-floating">
-        <label for="floatingPassword">Password</label>
         <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
     </div>
-    
     <div class="checkbox mb-3">
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">login</button>
     </form>
-</body>
+</div>
 {% endblock content %}

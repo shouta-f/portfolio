@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="alert alert-primary">
+  <h1 class="display-5">確認画面</h1>
+</div>
+<body class="text-center">
 <div class='container'>
   <form action='' method="POST">{% csrf_token %}
-    <input type="submit" name="button" value="削除">
+    <p class="h5">タスクを完了しますか？</p>
+    <input type="submit" name="button" value="完了">
+    <input type="button" value="戻る" onclick="history.back()" >
   </form>
 </div>
+</body>
 {% endblock content %}

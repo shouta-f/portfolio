@@ -2,21 +2,55 @@
 
 {% block header %}
 <div class="alert alert-primary">
-  <h1 class="display-3">Willdolist</h1>
+  <h1 class="display-3" style="text-align:center">Willdolist</h1>
+  <a class="h5" href="{% url 'description' %}" role="description">Willdolistとは？</a>
   <hr class="my-4">
-  <a class="btn btn-primary btn-lg" href="{% url 'description' %}" role="button">Willdolistとは？</a>
+  {% if user.is_authenticated %}
+    <p class="h5">{{ user.username }}でログイン中</p>
+    {% if request.user.is_superuser == True  %}
+      <p class="h5">※管理者アカウント</p>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'logout' %}" role="button">ログアウト</a>
+    <hr class="my-4">
+    <a class="btn btn-primary " href="{% url 'create' %}" role="button">タスクを作成する</a>
+  {% else %}
+    <p class="h5">ログインして下さい</p>
+    <a class="btn btn-primary" href="{% url 'login' %}" role="button">ログイン</a>
+    <a class="btn btn-primary " href="{% url 'signup' %}" role="button">アカウント作成</a>
+  {% endif %}
 </div>
 {% endblock %}
 
 {% block content %}
-<div class='container'>
+{% if request.user.is_superuser == True  %}
 {% for item in object_list %}
+<div class='container'>
   <div class="alert alert-{{ item.priority }}" role="alert">
-    <p>項目：{{ item.task_type }} {{ item.title }}</p>
+    <p>種類：{{ item.get_task_type_display }}</p>
+    <p>内容：{{ item.title }}</p>
+    <p>期日：{{ item.date }}</p>
+    <p>作成者：{{ item.create_user }}</p>
     <a href="{% url 'detail' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">詳細</a>
     <a href="{% url 'update' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">編集</a>
-    <a href="{% url 'delete' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">削除</a>
+    <a href="{% url 'delete' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">完了</a>
   </div>
-{% endfor %}
 </div>
+{% endfor %}
+{% else %}
+{% for item in object_list %}
+{% if request.user == item.create_user %}
+<div class='container'>
+  <div class="alert alert-{{ item.priority }}" role="alert">
+    <p>種類：{{ item.get_task_type_display }}</p>
+    <p>内容：{{ item.title }}</p>
+    <p>期日：{{ item.date }}</p>
+    <p>作成者：{{ item.create_user }}</p>
+    <a href="{% url 'detail' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">詳細</a>
+    <a href="{% url 'update' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">編集</a>
+    <a href="{% url 'delete' item.pk %}" class="btn btn-success btn active" role="button" aria-pressed="true">完了</a>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
 {% endblock content %}
